@@ -1,2 +1,2 @@
 # lucidML
-make AI/ML proccesses a piece of cake!!
+make ML proccesses a piece of cake!!
