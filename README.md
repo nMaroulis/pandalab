@@ -1,6 +1,5 @@
 # pandaLab
 
-
 [![Python](https://img.shields.io/badge/python-v3.12-yellow)]()
 [![Streamlit](https://img.shields.io/badge/streamlit-v1.38-red)]()
 [![Tensorflow](https://img.shields.io/badge/tensorflow-v2.18-orange)]()
