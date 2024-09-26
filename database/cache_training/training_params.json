@@ -1,0 +1,1 @@
+{"input_features": ["zn", "indus", "chas", "nox", "rm", "age", "dis", "rad", "tax", "ptratio", "b", "lstat", "medv"], "target_variable": "crim", "training_set_size": 80, "shuffle_data": false, "data_norm": "None", "model": "XGBoost [Auto]", "hyperparams": {"n_estimators": 420, "eta": 0.018, "max_depth": 10, "min_child_weight": 50, "min_split_loss": 0.0, "subsample": 1.0}}

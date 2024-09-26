@@ -1,0 +1,16 @@
+{
+  "crim": "per_capita_crime_rate_by_town",
+  "zn": "residential_land_zoned_over_25000_sqft",
+  "indus": "non_retail_business_acres_per_town",
+  "chas": "charles_river_dummy_variable",
+  "nox": "nitric_oxide_concentration_ppm",
+  "rm": "average_rooms_per_dwelling",
+  "age": "proportion_owner_occupied_units_pre_1940",
+  "dis": "weighted_distance_to_employment_centers",
+  "rad": "accessibility_to_radial_highways",
+  "tax": "property_tax_rate_per_10000",
+  "ptratio": "pupil_teacher_ratio_by_town",
+  "b": "black_population_proportion_indicator",
+  "lstat": "lower_status_population_percentage",
+  "medv": "median_value_of_homes_in_1000s"
+}
