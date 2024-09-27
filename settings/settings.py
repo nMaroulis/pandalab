@@ -1,4 +1,4 @@
-VERSION_NUMBER = 'v0.2.90.00'
+VERSION_NUMBER = 'v0.3.10.00'
 
 MODEL_SAVE_TEMP_PATH = 'database/tmp_model_archive/'
 

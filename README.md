@@ -13,3 +13,16 @@ make ML proccesses a piece of cake!!
 
 ## Overview
 
+### Instructions
+
+#### Dockerfile - Linux
+
+$ sudo su
+
+$ docker build -t pandalab_image .
+
+$ docker run --name pandalab --rm -d --network host pandalab_image
+
+$ docker ps
+
+$ docker exec -it pandalab /bin/bash

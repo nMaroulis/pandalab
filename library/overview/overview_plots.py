@@ -1,10 +1,8 @@
 from streamlit import session_state, cache_data, plotly_chart, write, columns, spinner
-# import matplotlib.pyplot as plt
 from math import ceil
 # from seaborn import heatmap, kdeplot, boxplot, violinplot
 from numpy import number
 from pandas import DataFrame, Timedelta
-# from settings.feature_map import feature_selection
 from plotly.graph_objects import Histogram, Figure, Box, Scatter
 from plotly.subplots import make_subplots
 from plotly.express import pie

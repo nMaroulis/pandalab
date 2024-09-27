@@ -2,7 +2,7 @@ import warnings
 import streamlit as st
 warnings.filterwarnings("ignore")
 warnings.simplefilter(action='ignore', category=FutureWarning)
-from library.file_reader.file_load_form import load_uploaded_logs, load_bookmarks, download_datatable_button, save_bookmark_button
+from library.file_reader.file_load_form import load_uploaded_datasets, load_bookmarks, download_datatable_button, save_bookmark_button
 from library.overview.overview_plots import get_feature_status_pie_chart, get_feature_null_pie_chart, get_feature_descriptive_analytics
 from library.overview.overview_tools import get_line_plot_form, get_density_plot_form, get_table_description
 from library.overview.navigation import page_header
@@ -31,7 +31,7 @@ else:
 if 'df' not in st.session_state:  # if no File is Loaded
     upload_col, bookmark_col = st.tabs(["File Uploader", "Bookmark Archive"])
     with upload_col:
-        load_uploaded_logs()
+        load_uploaded_datasets()
     with bookmark_col:
         load_bookmarks()
 else:  # if Dataframe is populated

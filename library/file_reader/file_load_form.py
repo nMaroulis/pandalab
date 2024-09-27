@@ -9,7 +9,7 @@ from library.file_reader.dictionary_funcs import get_dictionaries
 from datetime import datetime, time as dt_time
 
 
-def load_uploaded_logs():
+def load_uploaded_datasets():
 
     markdown("<h6 style='text-align: center; color: #5a5b5e;'>Data Uploader from local Filesystem</h6>", unsafe_allow_html=True)
 
