@@ -1,4 +1,6 @@
-# pandaLab
+<div align="center">
+[//]: # (<img src="https://raw.githubusercontent.com/nMaroulis/pandalab/refs/heads/main/static/logo.png">)
+</div>
 
 [![Python](https://img.shields.io/badge/python-v3.12-yellow)]()
 [![Streamlit](https://img.shields.io/badge/streamlit-v1.38-red)]()
@@ -8,10 +10,17 @@
 [![Sklearn](https://img.shields.io/badge/Scikit_Learn-v1.4.2-purple)]()
 
 
+# pandaLab - make ML processes a piece of cake!!
 
-make ML proccesses a piece of cake!!
+[//]: # (<hr>)
 
-## Overview
+[//]: # (<span style="color: red; font-size: 16px;">pre-alpha version</span>)
+
+[//]: # (<br>)
+
+Welcome to **pandaLab**! This application is your centralized hub for all things crypto. With Sibyl, you can connect multiple crypto exchange accounts, deploy smart trading strategies, and access a wide range of AI-powered tools—all within a secure, locally deployed environment.
+
+[//]: # (<hr>)
 
 ### Instructions
 
