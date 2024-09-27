@@ -18,7 +18,8 @@
 
 [//]: # (<br>)
 
-Welcome to **pandaLab**! This application is your centralized hub for all things crypto. With Sibyl, you can connect multiple crypto exchange accounts, deploy smart trading strategies, and access a wide range of AI-powered tools—all within a secure, locally deployed environment.
+Welcome to **pandaLab**! PandaLab is a powerful yet user-friendly Streamlit application for data exploration and machine learning. Users can upload one or multiple datasets (CSV, Parquet, Excel, etc.), which are automatically combined into a single pandas DataFrame stored in memory. The app provides a suite of tools for data preprocessing, in-depth data analysis, anomaly detection and a ML Model building module, where you can choose from a plethora of ML Models (DNNs, LSTMS, XGboost and many more..), fine-tune, train, evaluate and export the model.
+Additionally, PandaLab integrates an OpenAI API that allows you to chat with the DataFrame for more intuitive exploration. Whether you're analyzing patterns, building models, or detecting anomalies, PandaLab is your friendly workspace for data experimentation.
 
 [//]: # (<hr>)
 
