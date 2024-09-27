@@ -1,5 +1,5 @@
 <div align="center">
-[//]: # (<img src="https://raw.githubusercontent.com/nMaroulis/pandalab/refs/heads/main/static/logo.png">)
+<img src="https://raw.githubusercontent.com/nMaroulis/pandalab/refs/heads/main/static/logo.png">
 </div>
 
 [![Python](https://img.shields.io/badge/python-v3.12-yellow)]()

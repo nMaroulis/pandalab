@@ -1,5 +1,5 @@
-from streamlit import (markdown, file_uploader, columns, session_state, write, info, select_slider, button, warning, dataframe, spinner, date_input, time_input,
-                       selectbox, container, radio, expander, text_input, toggle, rerun, number_input, dialog, error, empty as st_empty, form, form_submit_button, html, download_button, toast)
+from streamlit import (file_uploader, columns, session_state, write, info, select_slider, button, fragment, divider, spinner,
+                       selectbox, container, radio, success, text_input, toggle, rerun, number_input, dialog, error, empty as st_empty, form, form_submit_button, html, download_button, toast)
 import warnings
 from os import listdir, path, walk
 warnings.filterwarnings("ignore")
@@ -8,10 +8,58 @@ from library.file_reader.file_loader import create_data_table, create_data_table
 from library.file_reader.dictionary_funcs import get_dictionaries
 from datetime import datetime, time as dt_time
 
+from library.overview.navigation import col_style2
+
+
+@fragment
+def dataset_option1():
+    write("**(1) Dataset Preprocessing**")
+    dict_options = get_dictionaries()
+    dict_options.insert(0, '<None>')
+    session_state['dictionary_choice'] = selectbox('Use Dictionary', options=dict_options)
+    session_state['compress_columns'] = toggle('Compress Column Types [memory usage optimization]', value=False)
+    session_state['data_imputation'] = toggle('Impute Data', value=False,
+                                              help="If certain numerical columns contain characters like >, <, +, -, remove them and just keep the Number")
+    # session_state['datatable_name'] = text_input('DataTable Name:', placeholder='Write the desired DataTable name!')
+
+
+@fragment
+def dataset_option2():
+    write("**(2) CSV File Options**")
+    session_state['csv_seperator'] = selectbox('CSV Seperator',
+                                               help="In case of CSV as uploaded File, please include the Seperator Symbol",
+                                               options=[',', ';', ' ', '|', 'tab'])
+    session_state['csv_skiplines'] = number_input('CSV Skip Lines',
+                                                  help="In case the CSV contains metadata in the beginning of the file, choose the number of lines to skip until the Headers start,",
+                                                  min_value=0, max_value=10000, value=0)
+
+@fragment
+def dataset_option3():
+    write("**(3) Timeseries Options**")
+    session_state['timestamp_label'] = text_input('Label of the Datetime Column:',
+                                                  placeholder='Label of DateTime in the Datasets..')
+    divider()
+    session_state['sampling_type'] = radio('Resampling Type:', options=['first', 'mean', 'max'],
+                                           help='first: Keep 1 sample of the whole second and remove the others. Mean: take the average from each sample of the second. Max: take the maximum sample within the second.',
+                                           horizontal=True)
+    divider()
+
+    session_state['sampling_rate'] = select_slider(
+        'Select the Desired **Sampling Rate** of the Data',
+        options=['Original', '1000Hz', '100Hz', '10Hz', '1Hz', '0.1Hz', '0.01Hz'], value='1Hz')
+    write('Selected Sampling Rate', session_state['sampling_rate'])
+    divider()
+
+    session_state['timestamp_format'] = radio('Timestamp Format', options=['Unix', 'DateTime', 'None'],
+                                              index=0,
+                                              help='Unix Timestamp is in the format of 1633524480. DateTime: yyyy/mm/dd hh:mm:ss. If None then not DateTime will be created.',
+                                              horizontal=True)
+
 
 def load_uploaded_datasets():
 
-    markdown("<h6 style='text-align: center; color: #5a5b5e;'>Data Uploader from local Filesystem</h6>", unsafe_allow_html=True)
+    html("<h6 style='text-align: center; color: #5a5b5e;'>Data Uploader from local Filesystem</h6>")
+    html(col_style2)  # set custom Column style
 
     uploaded_files = file_uploader(
         label="File Uploader",
@@ -28,42 +76,77 @@ def load_uploaded_datasets():
         session_state['file_uploading_options_container'] = st_empty()
         with session_state['file_uploading_options_container'].container():
             info(f""":page_facing_up: Supported File Formats are (***.csv***, ***.parquet***, ***.excel***, ***.mf4***, ***.dat***)""")
-            with expander('**(1) Output Options:**', expanded=True):
-                col20, col21 = columns(2)
-                with col20:
-                    session_state['sampling_type'] = radio('Resampling Type:', options=['first', 'mean', 'max'], help='first: Keep 1 sample of the whole second and remove the others. Mean: take the average from each sample of the second. Max: take the maximum sample within the second.', horizontal=True)
-                    session_state['compress_columns'] = toggle('Compress Column Types [memory usage optimization]', value=False)
-                with col21:
-                    session_state['sampling_rate'] = select_slider(
-                        'Select the Desired **Sampling Rate** of the Data',
-                        options=['Original', '1000Hz', '100Hz', '10Hz', '1Hz', '0.1Hz', '0.01Hz'], value='1Hz')
-                    write('Selected Sampling Rate', session_state['sampling_rate'])
-            with expander('**(2) Input Options:**', expanded=True):
-                col10, col11 = columns(2, gap="large")
-                with col10:
-                    session_state['timestamp_label'] = text_input('Label of the Datetime Column:',
-                                                                  placeholder='Label of DateTime in the Datasets..')
-                    session_state['data_imputation'] = toggle('Impute Data', value=True,
-                                                              help="If certain numerical columns contain characters like >, <, +, -, remove them and just keep the Number")
-                with col11:
-                    session_state['timestamp_format'] = radio('Timestamp Format', options=['Unix', 'DateTime', 'None'],
-                                                              index=0,
-                                                              help='Unix Timestamp is in the format of 1633524480. DateTime: yyyy/mm/dd hh:mm:ss. If None then not DateTime will be created.',
-                                                              horizontal=True)
-            with expander('**(3) File Options:**', expanded=True):
-                col00, col01 = columns(2)
-                with col00:
-                    session_state['datatable_name'] = text_input('DataTable Name:', placeholder='Write the desired DataTable name!')
-                    session_state['csv_seperator'] = selectbox('CSV Seperator',
-                                                               help="In case of CSV as uploaded File, please include the Seperator Symbol",
-                                                               options=[',', ';', ' ', '|', 'tab'])
-                with col01:
-                    dict_options = get_dictionaries()
-                    dict_options.insert(0, '<None>')
-                    session_state['dictionary_choice'] = selectbox('Use Dictionary', options=dict_options)
-                    session_state['csv_skiplines'] = number_input('CSV Skip Lines',
-                                                               help="In case the CSV contains metadata in the beginning of the file, choose the number of lines to skip until the Headers start,",
-                                                               min_value=0, max_value=10000, value=0)
+
+
+            c1, c2 = columns(2)
+
+            with c1:
+                dataset_option1()
+            with c2:
+                dataset_option2()
+
+            c3 = columns(1)
+            with c3[0]:
+                dataset_option3()
+
+
+
+
+# def load_uploaded_datasets_deprecated():
+#
+#     markdown("<h6 style='text-align: center; color: #5a5b5e;'>Data Uploader from local Filesystem</h6>", unsafe_allow_html=True)
+#
+#     uploaded_files = file_uploader(
+#         label="File Uploader",
+#         key="1",
+#         help="You can upload multiple files at once.",
+#         accept_multiple_files=True,
+#         label_visibility="hidden"
+#     )
+#
+#     if len(uploaded_files) > 0:
+#         create_data_table(uploaded_files, 'upload', session_state['sampling_rate'], session_state['timestamp_label'],
+#                           session_state['timestamp_format'], session_state['sampling_type'],  session_state['csv_seperator'], session_state['csv_skiplines'], session_state['dictionary_choice'])
+#     else:
+#         session_state['file_uploading_options_container'] = st_empty()
+#         with session_state['file_uploading_options_container'].container():
+#             info(f""":page_facing_up: Supported File Formats are (***.csv***, ***.parquet***, ***.excel***, ***.mf4***, ***.dat***)""")
+#             with expander('**(1) Output Options:**', expanded=True):
+#                 col20, col21 = columns(2)
+#                 with col20:
+#                     session_state['sampling_type'] = radio('Resampling Type:', options=['first', 'mean', 'max'], help='first: Keep 1 sample of the whole second and remove the others. Mean: take the average from each sample of the second. Max: take the maximum sample within the second.', horizontal=True)
+#                     session_state['compress_columns'] = toggle('Compress Column Types [memory usage optimization]', value=False)
+#                 with col21:
+#                     session_state['sampling_rate'] = select_slider(
+#                         'Select the Desired **Sampling Rate** of the Data',
+#                         options=['Original', '1000Hz', '100Hz', '10Hz', '1Hz', '0.1Hz', '0.01Hz'], value='1Hz')
+#                     write('Selected Sampling Rate', session_state['sampling_rate'])
+#             with expander('**(2) Input Options:**', expanded=True):
+#                 col10, col11 = columns(2, gap="large")
+#                 with col10:
+#                     session_state['timestamp_label'] = text_input('Label of the Datetime Column:',
+#                                                                   placeholder='Label of DateTime in the Datasets..')
+#                     session_state['data_imputation'] = toggle('Impute Data', value=True,
+#                                                               help="If certain numerical columns contain characters like >, <, +, -, remove them and just keep the Number")
+#                 with col11:
+#                     session_state['timestamp_format'] = radio('Timestamp Format', options=['Unix', 'DateTime', 'None'],
+#                                                               index=0,
+#                                                               help='Unix Timestamp is in the format of 1633524480. DateTime: yyyy/mm/dd hh:mm:ss. If None then not DateTime will be created.',
+#                                                               horizontal=True)
+#             with expander('**(3) File Options:**', expanded=True):
+#                 col00, col01 = columns(2)
+#                 with col00:
+#                     session_state['datatable_name'] = text_input('DataTable Name:', placeholder='Write the desired DataTable name!')
+#                     session_state['csv_seperator'] = selectbox('CSV Seperator',
+#                                                                help="In case of CSV as uploaded File, please include the Seperator Symbol",
+#                                                                options=[',', ';', ' ', '|', 'tab'])
+#                 with col01:
+#                     dict_options = get_dictionaries()
+#                     dict_options.insert(0, '<None>')
+#                     session_state['dictionary_choice'] = selectbox('Use Dictionary', options=dict_options)
+#                     session_state['csv_skiplines'] = number_input('CSV Skip Lines',
+#                                                                help="In case the CSV contains metadata in the beginning of the file, choose the number of lines to skip until the Headers start,",
+#                                                                min_value=0, max_value=10000, value=0)
 
 
 def get_bookmark_archives(directory_path='archive/bookmarks'):
@@ -79,7 +162,7 @@ def get_bookmark_archives(directory_path='archive/bookmarks'):
 
 
 def load_bookmarks():
-    markdown("<h6 style='text-align: center; color: #5a5b5e;'>Load Bookmark from local Archive</h6>", unsafe_allow_html=True)
+    html("<h6 style='text-align: center; color: #5a5b5e;'>Load Bookmark from local Archive</h6>")
 
     with container():
 
@@ -99,7 +182,7 @@ def load_bookmarks():
                 bookmark_list.sort()
             bookmark_choice = selectbox(label='Choose Bookmark to load:', options=bookmark_list)
 
-            markdown("<hr style='text-align: left; width:15em; margin: 0em 0em; color: #5a5b5e'></hr>", unsafe_allow_html=True)
+            html("<hr style='text-align: left; width:15em; margin: 0em 0em; color: #5a5b5e'></hr>")
 
             if len(bookmark_list) < 1:
                 button(label='Generate Data Table', disabled=True)
@@ -118,8 +201,7 @@ def download_datatable_dialog():
     html("<br><h5 style='text-align: left; color: #5a5b5e;padding-bottom:0;'>Download DataTable</h5>")
     dt_download_status = False
     with form('Download DataTable Form', clear_on_submit=True):
-        dt_name = text_input('File Name', value=session_state['datatable_name'],
-                                placeholder='Insert file name here')
+        dt_name = text_input('File Name', placeholder='Insert file name here')
         file_type_choice = radio('File Type', options=['csv', 'parquet', 'mf4', 'excel'], horizontal=True,
                                     disabled=True)
         html("<br>")
@@ -138,7 +220,7 @@ def download_datatable_dialog():
                 mime='text/csv',
                 type='primary'
             )
-            toast('📄 File is ready to download.')
+            toast('File is ready to download.', icon="📄")
 
 
 def save_bookmark_button():
@@ -155,7 +237,7 @@ def bookmark_datatable_dialog():
             dir_list = get_bookmark_archives('archive/bookmarks')
             arch_dir = selectbox(label='Choose Archive Directory:', options=dir_list)
         with col2:
-            arch_dt_name = text_input('File Name', value=session_state['datatable_name'], placeholder='Insert file name here')
+            arch_dt_name = text_input('File Name', placeholder='Insert file name here')
 
         info('💡 If file name is left empty, the filename will be automatically set to datatable_[current_datetime].')
         info('💡 The file type is automatically set to Parquet, since it\'s the optimal in terms of Efficiency and Performance.')
@@ -168,7 +250,8 @@ def bookmark_datatable_dialog():
                     write(arch_dt_name)
                 try:
                     session_state.df.to_parquet('archive/bookmarks/' + arch_dir + '/' + arch_dt_name + '.parquet', compression='gzip')
-                    toast('File Saved Successfully to Archive Catalog!', icon="✅ ")
+                    success('File Saved successfully to the Bookmark Catalog! You can close this window.', icon=":material/task_alt:")
+                    toast('File Saved Successfully to Archive Catalog!', icon=":material/task_alt:")
                 except Exception as e:
                     error('Something went wrong while saving File to Archive Catalog, Please report the following error to the administrator' + str(e))
                     print('LOG :: Bookmark save ::', e)

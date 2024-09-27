@@ -17,7 +17,7 @@ def page_header(title="pandaLab"):
     # PAGE HEADER
     reduce_header_height_style = """
         <style>
-            div.block-container {padding-top:2em;}
+            div.block-container {padding-top:2.2em;}
         </style>
     """
     html(reduce_header_height_style)
@@ -103,4 +103,22 @@ col_style4 = """
         transition: transform 0.9s ease;
 }
 </style>
+"""
+
+col_style5 = """
+    <style>
+    [data-testid="column"] {
+        # background-color: #f9f9f9;
+        box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 22px;
+        font-family: "serif";
+    }
+    [data-testid="column"]:hover {
+            background-color: #FDFDFD;
+            # transform: translateY(-5px); /* Added hover effect */
+            # filter: brightness(0.99);
+            # transition: transform 2.0s ease;
+    }
+    </style>
 """

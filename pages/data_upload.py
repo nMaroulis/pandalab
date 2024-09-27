@@ -6,7 +6,6 @@ from library.file_reader.file_load_form import load_uploaded_datasets, load_book
 from library.overview.overview_plots import get_feature_status_pie_chart, get_feature_null_pie_chart, get_feature_descriptive_analytics
 from library.overview.overview_tools import get_line_plot_form, get_density_plot_form, get_table_description
 from library.overview.navigation import page_header
-from PIL import Image
 from library.overview.overview_plots import get_missing_values
 
 from database.db_client import init_training_db, fetch_all
@@ -14,22 +13,22 @@ from database.db_client import init_training_db, fetch_all
 page_header()
 # init_training_db()
 # st.write(fetch_all())
-
-_, img_col, _ = st.columns([2, 1, 2])
-image = Image.open('static/logo.png')
-with img_col:
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.image(image, use_column_width=True)
-
+# from PIL import Image
+#_, img_col, _ = st.columns([2, 1, 2])
+# image = Image.open('static/logo.png')
+# # with img_col:
+# #     st.html("<br>")
+# st.image(image, use_column_width="auto")
 
 if 'df' in st.session_state:
-    st.markdown("<h3 style='text-align: left; color: #373737; padding: 0; margin: 0.5em 0 1em 0'>DataTable Overview</h3>", unsafe_allow_html=True)
+    st.html("<h3 style='text-align: left; color: #373737; padding: 0; margin: 1.2em 0 1em 0'>DataTable Overview</h3>")
 else:
-    # st.markdown("<h2 style='text-align: center; color: #373737;'>File Loader</h2>", unsafe_allow_html=True)
-    st.markdown("<h6 style='text-align: center; color: #48494B;'>Each module below provides a different interface to load Data to the Dashboard</h6>", unsafe_allow_html=True)
+    st.html("""<img style='display: block; margin-top: 1em; margin-left: auto; margin-right: auto; width: 520px' src='https://raw.githubusercontent.com/nMaroulis/pandalab/refs/heads/main/static/logo.png'>""")
+    st.html("<h3 style='text-align: center; color: #373737;'>File Uploading Tool</h3>")
+    st.html("<h6 style='text-align: center; color: #48494B;'>There are two options to populate the DataTable. You can upload 📤 one or multiple files through the uploading tool below. If you have saved a bookmark (datatable in the server's disk) you can directly load it 📂 through the Bookmark Loading Tab. </h6>")
 
 if 'df' not in st.session_state:  # if no File is Loaded
-    upload_col, bookmark_col = st.tabs(["File Uploader", "Bookmark Archive"])
+    upload_col, bookmark_col = st.tabs(["File Uploader", "Bookmark Catalog"])
     with upload_col:
         load_uploaded_datasets()
     with bookmark_col:
@@ -44,7 +43,7 @@ else:  # if Dataframe is populated
 
     cols = st.columns(3)
     with cols[0]:
-        st.markdown(f"""<br><br>""", unsafe_allow_html=True)
+        st.html(f"""<br><br>""")
         st.metric('Number of columns', st.session_state.df.shape[1], (st.session_state.df.shape[1] - st.session_state['initial features']))
         st.metric('Number of Samples', st.session_state.df.shape[0], (st.session_state.df.shape[0] - st.session_state['initial samples']))
 
